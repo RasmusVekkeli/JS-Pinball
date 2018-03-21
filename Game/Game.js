@@ -1,28 +1,24 @@
-// module aliases
-var Engine = Matter.Engine,
-    Render = Matter.Render,
-    World = Matter.World,
-    Bodies = Matter.Bodies;
+/* This is the start of a simple p5.js sketch using p5-matter.
+ Use this as a template for creating your own sketches! */
 
-// create an engine
-var engine = Engine.create();
+var ball;
+var floor;
 
-// create a renderer
-var render = Render.create({
-    element: document.body,
-    engine: engine
-});
+function setup() {
+    // put setup code here.
+    createCanvas(600, 600);
 
-// create two boxes and a ground
-var boxA = Bodies.rectangle(400, 200, 80, 80);
-var boxB = Bodies.rectangle(450, 50, 80, 80);
-var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+    ball = matter.makeBall(width / 2, 40, 80);
+    floor = matter.makeBarrier(width / 2, height, width, 50);
+}
 
-// add all of the bodies to the world
-World.add(engine.world, [boxA, boxB, ground]);
+function draw() {
+    // put the drawing code here
+    background(0);
 
-// run the engine
-Engine.run(engine);
+    fill(127);
+    floor.show();
 
-// run the renderer
-Render.run(render);
+    fill(255);
+    ball.show();
+}
