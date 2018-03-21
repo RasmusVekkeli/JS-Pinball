@@ -86,7 +86,6 @@ function draw() {
     // Draw the walls
     fill(140);
     for (var x = 0; x < walls.length; x++) {
-        var wall = walls[x];
-        wall.show();
+        walls[x].show();
     }
 }
