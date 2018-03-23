@@ -2,9 +2,12 @@
  *  TODO: [X] walls
  *        [ ] make the ball's physics more realistic
  *        [ ] level
+ *			[ ] flippers (player controlled)
+ *			[ ] bumpers	(launches the ball when it hits these)
+ *			[ ] targets (gives points when hit by ball)
  *        [ ] score
  *        [/] plunger
- *        
+ *        [ ] misc. game logic (game over, lost ball etc...)
  */
 
 var ball;
