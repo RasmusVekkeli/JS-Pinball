@@ -102,7 +102,6 @@ function plunge() { //Launches the ball if it's in the plungerArea when called
 		w: 60,
 		h: 60
 	}
-	console.log(ball.getHeight());
 
 	if (ball.getPositionX() + ball.getWidth() > plungerArea.x &&
 		ball.getPositionY() + ball.getHeight() > plungerArea.y &&
@@ -110,9 +109,5 @@ function plunge() { //Launches the ball if it's in the plungerArea when called
 		ball.getPositionY() < plungerArea.y + plungerArea.h) {
 
 		ball.setVelocityY(-30);
-
-		console.log("plunged!");
-	} else {
-		console.log("not plunged!");
 	}
 }
