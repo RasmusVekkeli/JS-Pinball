@@ -75,26 +75,28 @@ function moveFlippers() {
     if (keys && keys[37]) {
         if (leftFlipper.getAngle() > -0.5) {
             leftFlipper.setAngle(leftFlipper.getAngle() - flipperMovementSpeed);
+            leftFlipper.setVelocityY(-15);
+        } else {
+            leftFlipper.setVelocityY(0);
         }
-        leftFlipper.setVelocityY(-10);
     } else {
         if (leftFlipper.getAngle() < 0.5) {
             leftFlipper.setAngle(leftFlipper.getAngle() + flipperMovementSpeed);
         }
-        leftFlipper.setVelocityY(0);
     }
 
     /// RIGHT FLIPPER ///
     if (keys && keys[39]) {
         if (rightFlipper.getAngle() < 0.5) {
             rightFlipper.setAngle(rightFlipper.getAngle() + flipperMovementSpeed);
+            rightFlipper.setVelocityY(-15);
+        } else {
+            rightFlipper.setVelocityY(0);
         }
-        rightFlipper.setVelocityY(-10);
     } else {
         if (rightFlipper.getAngle() > -0.5) {
             rightFlipper.setAngle(rightFlipper.getAngle() - flipperMovementSpeed);
         }
-        rightFlipper.setVelocityY(0);
     }
 }
 
@@ -103,7 +105,6 @@ function checkBall() {
     if (ball.isOffCanvas()) {
         ball.setPositionX(random(0, width));
         ball.setPositionY(300);
-        console.log("reee");
     }
 }
 
@@ -111,7 +112,6 @@ function draw() {
     background(255);
 
     if (keys && keys[32]) { plunge(); }
-    checkBumpers();
 
     // Give the text a random color and draw it
     fill(random(0, 255), random(0, 255), random(0, 255));
@@ -143,18 +143,23 @@ function draw() {
         walls[x].show();
 	}
 
-    for (var i = 0; i < levelObjects.length; i++) {
-        if (i >= 2 && i <= 4) { fill(0, 255, 255); }
-        else { fill(140); }
+    for (var i = 0; i < levelObjects.length - 3; i++) {
 		levelObjects[i].show();
-	}
+    }
+
+    bumpers();
 }
 
-function checkBumpers() {
-    for (var i = 6; i <= 8; i++) {
-        //console.log(ballIsInsideCircle(levelObjects[i]));
+function bumpers() {
+    for (var i = levelObjects.length - 3; i < levelObjects.length; i++) {
         if (ballIsInsideCircle(levelObjects[i])) {
-            console.log("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            fill(255, 0, 0);
+            levelObjects[i].show();
+            ball.setVelocityX(ball.getPositionX() - levelObjects[i].getPositionX());
+            ball.setVelocityY(ball.getPositionY() - levelObjects[i].getPositionY());
+        } else {
+            fill(0, 255, 0);
+            levelObjects[i].show();
         }
     }
 }
@@ -188,6 +193,8 @@ function initialiseLevel() { //Create and set positions of level objects
 	levelObjects.push(matter.makeBarrier(70, 806, 220, 51, { angle: 0.55 }));	//Bottom left block
 	levelObjects.push(matter.makeBarrier(371, 818, 185, 51, { angle: -0.55 }));	//Bottom right block
     levelObjects.push(matter.makeBarrier(-5, 700, 20, 100, { angle: -0.15 }));  // left, small
+
+
 
     levelObjects.push(matter.makeBall(200, 250, 40, { isSensor: true, isStatic: true }));
     levelObjects.push(matter.makeBall(250, 250, 40, { isSensor: true, isStatic: true }));
