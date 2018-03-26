@@ -32,11 +32,9 @@ function setup() {
 	ball = matter.makeBall(random(0, width), 300, 40, ballOptions);
 	ground = matter.makeBarrier(width / 2, 900, 1000, 15, { isStatic: true });
 
-    leftFlipper = matter.makeBarrier(width / 2 - 50, 300, 75, 10);
-    rightFlipper = matter.makeBarrier(width / 2 + 50, 300, 75, 10);
-    leftFlipper.setAngle(-0.05);
-    rightFlipper.setAngle(0.05);
-
+    leftFlipper = matter.makeBarrier(width / 2 - 50, 300, 75, 10, { angle: -0.05 });
+    rightFlipper = matter.makeBarrier(width / 2 + 50, 300, 75, 10, { angle: 0.05 });
+    
     textOptions = {
         isStatic: true,
         isSensor: true
@@ -65,8 +63,7 @@ function moveGround() {
 	if (keys && keys[38]) {
 		ground.setVelocityY(-5);
 		ground.setPositionY(ground.getPositionY() - 5);
-	}
-	else {
+	} else {
 		ground.setVelocityY(0);
 	}
     if (keys && keys[40]) { ground.setPositionY(ground.getPositionY() + 5); }   // Move the platform down
@@ -76,25 +73,35 @@ function moveGround() {
 }
 
 function moveFlippers() {
+    /// LEFT FLIPPER ///
     if (keys && keys[37]) {
         if (leftFlipper.getAngle() > -0.5) {
             leftFlipper.setAngle(leftFlipper.getAngle() - flipperMovementSpeed);
         }
+        leftFlipper.setVelocityY(-10);
     } else {
         if (leftFlipper.getAngle() < 0.5) {
             leftFlipper.setAngle(leftFlipper.getAngle() + flipperMovementSpeed);
         }
+        leftFlipper.setVelocityY(0);
     }
+    //leftFlipper.setPositionX(width / 2 - 50);
+    //leftFlipper.setPositionY(300);
 
+    /// RIGHT FLIPPER ///
     if (keys && keys[39]) {
         if (rightFlipper.getAngle() < 0.5) {
             rightFlipper.setAngle(rightFlipper.getAngle() + flipperMovementSpeed);
         }
+        rightFlipper.setVelocityY(-10);
     } else {
         if (rightFlipper.getAngle() > -0.5) {
             rightFlipper.setAngle(rightFlipper.getAngle() - flipperMovementSpeed);
         }
+        rightFlipper.setVelocityY(0);
     }
+    //rightFlipper.setPositionX(width / 2 + 50);
+    //rightFlipper.setPositionY(300);
 }
 
 //Resets the ball's position if off canvas
