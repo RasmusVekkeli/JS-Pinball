@@ -38,9 +38,9 @@ function setup() {
 
 	ball = matter.makeBall(490, 300, 20, ballOptions);
 
-    leftFlipper = matter.makeBarrier(width / 2 - 50, 850, 75, 10, { angle: -0.05 });
-    rightFlipper = matter.makeBarrier(width / 2 + 50, 850, 75, 10, { angle: 0.05 });
-    
+    leftFlipper = matter.makeBarrier(width / 2 - 50, 850, 75, 10, { angle: -0.05 }, CENTER);
+    rightFlipper = matter.makeBarrier(width / 2 + 50, 850, 75, 10, { angle: 0.05 }, CORNERS);
+
     textOptions = {
         isStatic: true,
         isSensor: true
@@ -142,7 +142,10 @@ function draw() {
         walls[x].show();
 	}
 
-	for (var i = 0; i < levelObjects.length; i++) {
+    for (var i = 0; i < levelObjects.length; i++) {
+        if (i > 2 && i < 4) { fill(0, 255, 255); }
+        else
+            fill(140);
 		levelObjects[i].show();
 	}
 }
@@ -167,7 +170,11 @@ function plunge() { //Launches the ball if it's in the plungerArea when called
 
 function initialiseLevel() { //Create and set positions of level objects
 	levelObjects.push(matter.makeBarrier(470, 550, 10, 700)); // Plunger wall
-	levelObjects.push(matter.makeBarrier(500, 30, 250, 50, { angle: 0.65 }));   // Top-right block
-	levelObjects.push(matter.makeBarrier(0, 800, 300, 10, { angle: 0.30 }));
+    levelObjects.push(matter.makeBarrier(500, 30, 250, 50, { angle: 0.65 }));   // Top-right block
+
+    levelObjects.push(matter.makeBall(50, 250, 40, { isSensor: true, isStatic: true }));
+    levelObjects.push(matter.makeBall(150, 250, 40, { isSensor: true, isStatic: true }));
+
+	levelObjects.push(matter.makeBarrier(0, 739, 400, 10, { angle: 0.50 })); // Left bumper extension
 
 }
