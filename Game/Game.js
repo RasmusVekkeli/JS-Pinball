@@ -15,7 +15,13 @@ var ground;
 var keys;
 var helloText;
 var walls = [];
+var wallWidth = 50;
 var flipperMovementSpeed = 0.30;
+
+var mouseMoveX;
+var mouseMoveY;
+var prevMouseMoveX;
+var prevMouseMoveY;
 
 // Initialize
 function setup() {
@@ -30,7 +36,6 @@ function setup() {
     }
 
 	ball = matter.makeBall(random(0, width), 300, 40, ballOptions);
-	ground = matter.makeBarrier(width / 2, 900, 1000, 15, { isStatic: true });
 
     leftFlipper = matter.makeBarrier(width / 2 - 50, 300, 75, 10, { angle: -0.05 });
     rightFlipper = matter.makeBarrier(width / 2 + 50, 300, 75, 10, { angle: 0.05 });
@@ -41,10 +46,10 @@ function setup() {
     }
     helloText = matter.makeSign("Hello!", width / 2, 150, textOptions);
 
-    walls.push(matter.makeBarrier(0, 0, 10, height * 2));       // Left wall
-    walls.push(matter.makeBarrier(width, 0, 10, height * 2));   // Right wall
-    walls.push(matter.makeBarrier(0, height, width * 2, 10));   // Bottom wall
-	walls.push(matter.makeBarrier(0, 0, width * 2, 10));        // Top wall
+    walls.push(matter.makeBarrier(-(wallWidth / 2), 0, wallWidth, height * 2));             // Left wall
+    walls.push(matter.makeBarrier(width + wallWidth / 2 - 1, 0, wallWidth, height * 2));    // Right wall
+    walls.push(matter.makeBarrier(0, height + (wallWidth / 2) - 1, width * 2, wallWidth));  // Bottom wall
+    walls.push(matter.makeBarrier(0, -(wallWidth / 2), width * 2, wallWidth));              // Top wall
 
     // See if multiple keys are pressed
     window.addEventListener("keydown", function (e) {
@@ -55,21 +60,11 @@ function setup() {
     window.addEventListener("keyup", function (e) {
         keys[e.keyCode] = false;
     });
-}
 
-// Moving the ground
-function moveGround() {
-	// Move the platform up
-	if (keys && keys[38]) {
-		ground.setVelocityY(-5);
-		ground.setPositionY(ground.getPositionY() - 5);
-	} else {
-		ground.setVelocityY(0);
-	}
-    if (keys && keys[40]) { ground.setPositionY(ground.getPositionY() + 5); }   // Move the platform down
-    if (keys && keys[37]) { ground.setAngle(ground.getAngle() - 0.05); }        // Rotate the platform to left
-	if (keys && keys[39]) { ground.setAngle(ground.getAngle() + 0.05); }        // Rotate the platform to right
-	if (keys && keys[32]) { plunge(); }											// Activate plunger
+    window.addEventListener("mousemove", function (e) {
+        mouseMoveX = e.pageX;
+        mouseMoveY = e.pageY;
+    });
 }
 
 function moveFlippers() {
@@ -85,8 +80,6 @@ function moveFlippers() {
         }
         leftFlipper.setVelocityY(0);
     }
-    //leftFlipper.setPositionX(width / 2 - 50);
-    //leftFlipper.setPositionY(300);
 
     /// RIGHT FLIPPER ///
     if (keys && keys[39]) {
@@ -100,8 +93,6 @@ function moveFlippers() {
         }
         rightFlipper.setVelocityY(0);
     }
-    //rightFlipper.setPositionX(width / 2 + 50);
-    //rightFlipper.setPositionY(300);
 }
 
 //Resets the ball's position if off canvas
@@ -116,14 +107,11 @@ function checkBall() {
 function draw() {
     background(255);
 
+    if (keys && keys[32]) { plunge(); }
+
     // Give the text a random color and draw it
     fill(random(0, 255), random(0, 255), random(0, 255));
     helloText.show();
-
-    // Change the drawing color to back, move the ground and draw it
-    fill(0);
-    moveGround();
-    ground.show();
 
     // Draw the ball
     checkBall();
@@ -135,6 +123,15 @@ function draw() {
     moveFlippers();
     leftFlipper.show();
     rightFlipper.show();
+
+    // Log the mouse coordinates
+    if (prevMouseMoveX != mouseMoveX && prevMouseMoveY != mouseMoveY) {
+        console.log("mouse X = " + mouseMoveX);
+        console.log("mouse Y = " + mouseMoveY);
+        console.log("====================");
+    }
+    prevMouseMoveX = mouseMoveX;
+    prevMouseMoveY = mouseMoveY;
 
     // Draw the walls
     fill(140);
