@@ -142,7 +142,10 @@ function draw() {
         walls[x].show();
 	}
 
-	for (var i = 0; i < levelObjects.length; i++) {
+    for (var i = 0; i < levelObjects.length; i++) {
+        if (i > 2 && i < 4) { fill(0, 255, 255); }
+        else
+            fill(140);
 		levelObjects[i].show();
 	}
 }
