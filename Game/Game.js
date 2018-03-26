@@ -90,11 +90,11 @@ function moveFlippers() {
     }
 }
 
-// Doesn't work set the ball's position, please fix
+//Resets the ball's position if off canvas
 function checkBall() {
     if (ball.isOffCanvas()) {
-        ball.setPositionX = random(0, width);
-        ball.setPositionY = 300;
+        ball.setPositionX(random(0, width));
+        ball.setPositionY(300);
         console.log("reee");
     }
 }
