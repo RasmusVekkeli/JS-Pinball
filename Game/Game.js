@@ -2,7 +2,7 @@
  *  TODO: [X] walls
  *        [ ] make the ball's physics more realistic
  *        [ ] level
- *		  [ ] flippers (player controlled)
+ *		  [X] flippers (player controlled)
  *		  [ ] bumpers (launches the ball when it hits these)
  *		  [ ] targets (gives points when hit by ball)
  *        [ ] score
@@ -49,7 +49,7 @@ function setup() {
 
     walls.push(matter.makeBarrier(-(wallWidth / 2), 0, wallWidth, height * 2));             // Left wall
     walls.push(matter.makeBarrier(width + wallWidth / 2 - 1, 0, wallWidth, height * 2));    // Right wall
-
+    walls.push(matter.makeBarrier(483, 924, 35, wallWidth));                                // Bottom wall (plunger)
     walls.push(matter.makeBarrier(0, -(wallWidth / 2), width * 2, wallWidth));              // Top wall
 
 	initialiseLevel();
@@ -75,7 +75,7 @@ function moveFlippers() {
     if (keys && keys[37]) {
         if (leftFlipper.getAngle() > -0.5) {
             leftFlipper.setAngle(leftFlipper.getAngle() - flipperMovementSpeed);
-            leftFlipper.setVelocityY(-15);
+            leftFlipper.setVelocityY(-10);
         } else {
             leftFlipper.setVelocityY(0);
         }
@@ -89,7 +89,7 @@ function moveFlippers() {
     if (keys && keys[39]) {
         if (rightFlipper.getAngle() < 0.5) {
             rightFlipper.setAngle(rightFlipper.getAngle() + flipperMovementSpeed);
-            rightFlipper.setVelocityY(-15);
+            rightFlipper.setVelocityY(-10);
         } else {
             rightFlipper.setVelocityY(0);
         }
