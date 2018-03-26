@@ -30,7 +30,7 @@ function setup() {
     }
 
 	ball = matter.makeBall(random(0, width), 300, 40, ballOptions);
-	ground = matter.makeBarrier(width / 2, 900, 1000, 15);
+	ground = matter.makeBarrier(width / 2, 900, 1000, 15, { isStatic: true });
 
     leftFlipper = matter.makeBarrier(width / 2 - 50, 300, 75, 10);
     rightFlipper = matter.makeBarrier(width / 2 + 50, 300, 75, 10);
@@ -61,7 +61,14 @@ function setup() {
 
 // Moving the ground
 function moveGround() {
-	if (keys && keys[38]) { ground.setPositionY(ground.getPositionY() - 5); }   // Move the platform up
+	// Move the platform up
+	if (keys && keys[38]) {
+		ground.setVelocityY(-5);
+		ground.setPositionY(ground.getPositionY() - 5);
+	}
+	else {
+		ground.setVelocityY(0);
+	}
     if (keys && keys[40]) { ground.setPositionY(ground.getPositionY() + 5); }   // Move the platform down
     if (keys && keys[37]) { ground.setAngle(ground.getAngle() - 0.05); }        // Rotate the platform to left
 	if (keys && keys[39]) { ground.setAngle(ground.getAngle() + 0.05); }        // Rotate the platform to right
