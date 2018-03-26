@@ -36,10 +36,10 @@ function setup() {
 		restitution: 0.8
     }
 
-	ball = matter.makeBall(random(0, width), 300, 40, ballOptions);
+	ball = matter.makeBall(random(0, width), 300, 20, ballOptions);
 
-    leftFlipper = matter.makeBarrier(width / 2 - 50, 300, 75, 10, { angle: -0.05 });
-    rightFlipper = matter.makeBarrier(width / 2 + 50, 300, 75, 10, { angle: 0.05 });
+    leftFlipper = matter.makeBarrier(width / 2 - 50, 850, 75, 10, { angle: -0.05 });
+    rightFlipper = matter.makeBarrier(width / 2 + 50, 850, 75, 10, { angle: 0.05 });
     
     textOptions = {
         isStatic: true,
@@ -49,7 +49,7 @@ function setup() {
 
     walls.push(matter.makeBarrier(-(wallWidth / 2), 0, wallWidth, height * 2));             // Left wall
     walls.push(matter.makeBarrier(width + wallWidth / 2 - 1, 0, wallWidth, height * 2));    // Right wall
-    walls.push(matter.makeBarrier(0, height + (wallWidth / 2) - 1, width * 2, wallWidth));  // Bottom wall
+
     walls.push(matter.makeBarrier(0, -(wallWidth / 2), width * 2, wallWidth));              // Top wall
 
 	initialiseLevel();
@@ -166,7 +166,9 @@ function plunge() { //Launches the ball if it's in the plungerArea when called
 }
 
 function initialiseLevel() { //Create and set positions of level objects
-	levelObjects.push(matter.makeBarrier(430, 550, 10, 700));
-	levelObjects.push(matter.makeBarrier(450, 50, 1000, 30, { angle: 0.65 }));
-	levelObjects[1].setVelocityX(-20);
+	levelObjects.push(matter.makeBarrier(430, 550, 10, 700));                   // Plunger wall
+    levelObjects.push(matter.makeBarrier(500, 30, 250, 50, { angle: 0.65 }));   // Top-right block
+
+    levelObjects.push(matter.makeBarrier(200, 850, 50, 50, { angle: 0.5 }));
+
 }
