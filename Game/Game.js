@@ -38,8 +38,8 @@ function setup() {
 
 	ball = matter.makeBall(490, 300, 20, ballOptions);
 
-    leftFlipper = matter.makeBarrier((width - 35) / 2 - 50, 850, 75, 10, { angle: -0.05 });
-    rightFlipper = matter.makeBarrier((width - 35) / 2 + 50, 850, 75, 10, { angle: 0.05 });
+    leftFlipper = matter.makeBarrier(465 / 2 - 50, 850, 75, 10, { angle: -0.05 });
+    rightFlipper = matter.makeBarrier(465 / 2 + 50, 850, 75, 10, { angle: 0.05 });
     
     textOptions = {
         isStatic: true,
@@ -111,6 +111,7 @@ function draw() {
     background(255);
 
     if (keys && keys[32]) { plunge(); }
+    checkBumpers();
 
     // Give the text a random color and draw it
     fill(random(0, 255), random(0, 255), random(0, 255));
@@ -143,11 +144,23 @@ function draw() {
 	}
 
     for (var i = 0; i < levelObjects.length; i++) {
-        if (i > 2 && i < 4) { fill(0, 255, 255); }
-        else
-            fill(140);
+        if (i >= 2 && i <= 4) { fill(0, 255, 255); }
+        else { fill(140); }
 		levelObjects[i].show();
 	}
+}
+
+function checkBumpers() {
+    for (var i = 6; i <= 8; i++) {
+        //console.log(ballIsInsideCircle(levelObjects[i]));
+        if (ballIsInsideCircle(levelObjects[i])) {
+            console.log("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        }
+    }
+}
+
+function ballIsInsideCircle(object) {
+    return ((Math.sqrt(Math.pow((object.getPositionX() - ball.getPositionX()), 2) + Math.pow((object.getPositionY() - ball.getPositionY()), 2)) - (object.getWidth() / 2)) < ball.getWidth() / 2);
 }
 
 function plunge() { //Launches the ball if it's in the plungerArea when called
@@ -174,5 +187,9 @@ function initialiseLevel() { //Create and set positions of level objects
 	levelObjects.push(matter.makeBarrier(0, 30, 250, 50, { angle: -0.65 }));   // Top left block
 	levelObjects.push(matter.makeBarrier(70, 806, 220, 51, { angle: 0.55 }));	//Bottom left block
 	levelObjects.push(matter.makeBarrier(371, 818, 185, 51, { angle: -0.55 }));	//Bottom right block
-	levelObjects.push(matter.makeBarrier(-5, 700, 20, 100, { angle: -0.15 }));
+    levelObjects.push(matter.makeBarrier(-5, 700, 20, 100, { angle: -0.15 }));  // left, small
+
+    levelObjects.push(matter.makeBall(200, 250, 40, { isSensor: true, isStatic: true }));
+    levelObjects.push(matter.makeBall(250, 250, 40, { isSensor: true, isStatic: true }));
+    levelObjects.push(matter.makeBall(300, 250, 40, { isSensor: true, isStatic: true }));
 }
