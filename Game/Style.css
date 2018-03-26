@@ -1,10 +1,13 @@
 ﻿body
 {
 	background-color: royalblue;
+	padding: 0px;
+	margin: 0px;
 }
 
 canvas{
-	margin: auto;
+	margin: 0px;
+	padding: 0px;
 	display: block;
 	background-color: dimgrey;
 }

@@ -36,7 +36,7 @@ function setup() {
 		restitution: 0.8
     }
 
-	ball = matter.makeBall(random(0, width), 300, 40, ballOptions);
+	ball = matter.makeBall(490, 300, 20, ballOptions);
 
     leftFlipper = matter.makeBarrier(width / 2 - 50, 300, 75, 10, { angle: -0.05 });
     rightFlipper = matter.makeBarrier(width / 2 + 50, 300, 75, 10, { angle: 0.05 });
@@ -166,7 +166,8 @@ function plunge() { //Launches the ball if it's in the plungerArea when called
 }
 
 function initialiseLevel() { //Create and set positions of level objects
-	levelObjects.push(matter.makeBarrier(430, 550, 10, 700));
+	levelObjects.push(matter.makeBarrier(470, 550, 10, 700));
 	levelObjects.push(matter.makeBarrier(450, 50, 1000, 30, { angle: 0.65 }));
-	levelObjects[1].setVelocityX(-20);
+	levelObjects.push(matter.makeBarrier(0, 800, 300, 10, { angle: 0.30 }));
+
 }
