@@ -15,6 +15,7 @@ var ground;
 var keys;
 var helloText;
 var walls = [];
+var levelObjects = [];
 var flipperMovementSpeed = 0.30;
 
 // Initialize
@@ -29,7 +30,7 @@ function setup() {
 		restitution: 0.8
     }
 
-	ball = matter.makeBall(random(0, width), 300, 40, ballOptions);
+	ball = matter.makeBall(/*random(0, width)*/480, 300, 40, ballOptions);
 	ground = matter.makeBarrier(width / 2, 900, 1000, 15, { isStatic: true });
 
     leftFlipper = matter.makeBarrier(width / 2 - 50, 300, 75, 10);
@@ -47,6 +48,8 @@ function setup() {
     walls.push(matter.makeBarrier(width, 0, 10, height * 2));   // Right wall
     walls.push(matter.makeBarrier(0, height, width * 2, 10));   // Bottom wall
 	walls.push(matter.makeBarrier(0, 0, width * 2, 10));        // Top wall
+
+	initialiseLevel();
 
     // See if multiple keys are pressed
     window.addEventListener("keydown", function (e) {
@@ -69,7 +72,12 @@ function moveGround() {
 	else {
 		ground.setVelocityY(0);
 	}
-    if (keys && keys[40]) { ground.setPositionY(ground.getPositionY() + 5); }   // Move the platform down
+
+	if (keys && keys[40]) {
+		ground.setVelocityY(5);
+		ground.setPositionY(ground.getPositionY() + 5);
+	}
+
     if (keys && keys[37]) { ground.setAngle(ground.getAngle() - 0.05); }        // Rotate the platform to left
 	if (keys && keys[39]) { ground.setAngle(ground.getAngle() + 0.05); }        // Rotate the platform to right
 	if (keys && keys[32]) { plunge(); }											// Activate plunger
@@ -133,7 +141,11 @@ function draw() {
     fill(140);
     for (var x = 0; x < walls.length; x++) {
         walls[x].show();
-    }
+	}
+
+	for (var i = 0; i < levelObjects.length; i++) {
+		levelObjects[i].show();
+	}
 }
 
 function plunge() { //Launches the ball if it's in the plungerArea when called
@@ -144,6 +156,7 @@ function plunge() { //Launches the ball if it's in the plungerArea when called
 		h: 60
 	}
 
+	//I really hate this if-statement, why does it have to be this way?
 	if (ball.getPositionX() + ball.getWidth() > plungerArea.x &&
 		ball.getPositionY() + ball.getHeight() > plungerArea.y &&
 		ball.getPositionX() < plungerArea.x + plungerArea.w &&
@@ -151,4 +164,10 @@ function plunge() { //Launches the ball if it's in the plungerArea when called
 
 		ball.setVelocityY(-30);
 	}
+}
+
+function initialiseLevel() { //Create and set positions of level objects
+	levelObjects.push(matter.makeBarrier(430, 550, 10, 700));
+	levelObjects.push(matter.makeBarrier(450, 50, 1000, 30, { angle: 0.65 }));
+	levelObjects[1].setVelocityX(-20);
 }
