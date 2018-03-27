@@ -40,8 +40,8 @@ function setup() {
 
 	ball = matter.makeBall(490, 300, 20, ballOptions);
 
-    leftFlipper = matter.makeBarrier(465 / 2 - 55, 848.3, 80, 13, { angle: -0.05 });
-    rightFlipper = matter.makeBarrier(465 / 2 + 55, 848.3, 80, 13, { angle: 0.05 });
+    leftFlipper = matter.makeBarrier(465 / 2 - 55, 848.5, 80, 13, { angle: -0.05 });
+    rightFlipper = matter.makeBarrier(465 / 2 + 55, 848.5, 80, 13, { angle: 0.05 });
     
     textOptions = {
         isStatic: true,
@@ -87,6 +87,7 @@ function moveFlippers() {
         if (leftFlipper.getAngle() < 0.5) {
             leftFlipper.setAngle(leftFlipper.getAngle() + flipperMovementSpeed);
         }
+        rightFlipper.setVelocityY(0);
     }
 
     /// RIGHT FLIPPER ///
@@ -101,6 +102,7 @@ function moveFlippers() {
         if (rightFlipper.getAngle() > -0.5) {
             rightFlipper.setAngle(rightFlipper.getAngle() - flipperMovementSpeed);
         }
+        rightFlipper.setVelocityY(0);
     }
 }
 
@@ -167,7 +169,7 @@ function draw() {
 
 function makePlungerWall() {
     // Are we in a game?
-    if (!game.isInGameArea) {
+    if (game.isInGameArea) {
         // See if it's a small wall
         if (plungerWall.getWidth() < 12.5) {
             matter.forget(plungerWall); // Forget/"break" the object
