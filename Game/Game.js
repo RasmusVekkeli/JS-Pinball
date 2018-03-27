@@ -16,7 +16,9 @@ var keys;
 var helloText;
 var walls = [];
 var wallWidth = 50;
+var areaMiddle = 232.5;
 var levelObjects = [];
+var bumperBalls = [];
 var flipperMovementSpeed = 0.30;
 
 var mouseMoveX;
@@ -47,7 +49,7 @@ function setup() {
         isStatic: true,
         isSensor: true
     }
-    helloText = matter.makeSign("Hello!", width / 2, 150, textOptions);
+    helloText = matter.makeSign("Hello!", areaMiddle, 150, textOptions);
 
     walls.push(matter.makeBarrier(-(wallWidth / 2), 0, wallWidth, height * 2));             // Left wall
     walls.push(matter.makeBarrier(width + wallWidth / 2 - 1, 0, wallWidth, height * 2));    // Right wall
@@ -141,23 +143,21 @@ function draw() {
         walls[x].show();
 	}
 
-    for (var i = 0; i < levelObjects.length - 3; i++) {
+    for (var i = 0; i < bumperBalls.length; i++) {
+        bumperBalls[i].show();
+    }
+    bumpers();
+
+    fill(140);
+    for (var i = 0; i < levelObjects.length; i++) {
 		levelObjects[i].show();
     }
 
-    // Make the plunger wall bigger if the ball is in the play area
-    //if (isInGame()) {
-    //    matter.makeBarrier(470, 550, 10, 700); // Plunger wall
-    //    plungerWall.show();
-    //} else {
-    //    levelObjects[0].width = 25;
-    //}
 	game.checkInGame();
 	game.checkLost();
     makePlungerWall();
     plungerWall.show();
 
-    bumpers();
 }
 
 function makePlungerWall() {
@@ -167,29 +167,25 @@ function makePlungerWall() {
         if (plungerWall.getWidth() < 12.5) {
             matter.forget(plungerWall); // Forget/"break" the object
             plungerWall = matter.makeBarrier(487, 550, 45, 700); // Make a new one with updated width & x-position
-            console.log("large plungerWall made!");
         }
     } else {
         if (plungerWall.getWidth() > 12.5) {
             matter.forget(plungerWall); // Forget/"break" the object
             plungerWall = matter.makeBarrier(470, 550, 10, 700); // Make a new one with updated width & x-position
-            console.log("small plungerWall made!");
         }
     }
 }
 
 function bumpers() {
-    for (var i = levelObjects.length - 3; i < levelObjects.length; i++) {
-        if (ballIsInsideCircle(levelObjects[i])) {
+    for (var i = 0; i < bumperBalls.length; i++) {
+        if (ballIsInsideCircle(bumperBalls[i])) {
             fill(255, 0, 0);
-            levelObjects[i].show();
-            levelObjects[i].radius = 50;
-            ball.setVelocityX(ball.getPositionX() - levelObjects[i].getPositionX());
-            ball.setVelocityY(ball.getPositionY() - levelObjects[i].getPositionY());
+            bumperBalls[i].show();
+            ball.setVelocityX(ball.getPositionX() - bumperBalls[i].getPositionX());
+            ball.setVelocityY(ball.getPositionY() - bumperBalls[i].getPositionY());
         } else {
             fill(0, 255, 0);
-            levelObjects[i].radius = 40;
-            levelObjects[i].show();
+            bumperBalls[i].show();
         }
     }
 }
@@ -220,17 +216,20 @@ function initialiseLevel() { //Create and set positions of level objects
 
     /// NORMAL BLOCKS ///
 	levelObjects.push(matter.makeBarrier(500, 30, 250, 50, { angle: 0.65 }));   // Top right block
-	levelObjects.push(matter.makeBarrier(0, 30, 250, 50, { angle: -0.65 }));   // Top left block
+    levelObjects.push(matter.makeBarrier(75, 47.5, 75, 20));   // Top left block 1
+    levelObjects.push(matter.makeBarrier(47.5, 75, 20, 75));   // Top left block 2
 	levelObjects.push(matter.makeBarrier(72, 806, 220, 51, { angle: 0.55 }));	//Bottom left block
 	levelObjects.push(matter.makeBarrier(377, 815.5, 185, 51, { angle: -0.55 }));	//Bottom right block
 	levelObjects.push(matter.makeBarrier(-5, 700, 20, 100, { angle: -0.30 }));  // left, small
-	levelObjects.push(matter.makeBarrier(455, 710, 10, 100, { angle: 0.30 })); //right, small
+    levelObjects.push(matter.makeBarrier(455, 710, 10, 100, { angle: 0.30 })); //right, small
 
 
     /// BUMPER BALLS ///
-    levelObjects.push(matter.makeBall(200, 250, 40, { isSensor: true, isStatic: true }));
-    levelObjects.push(matter.makeBall(250, 250, 40, { isSensor: true, isStatic: true }));
-    levelObjects.push(matter.makeBall(300, 250, 40, { isSensor: true, isStatic: true }));
+    bumperBalls.push(matter.makeBall(areaMiddle - 150, 250, 40, { isSensor: true, isStatic: true }));
+    bumperBalls.push(matter.makeBall(areaMiddle, 300, 40, { isSensor: true, isStatic: true }));
+    bumperBalls.push(matter.makeBall(areaMiddle + 150, 250, 40, { isSensor: true, isStatic: true }));
+    bumperBalls.push(matter.makeBall(10, 10, 20, { isSensor: true, isStatic: true }));
+    bumperBalls.push(matter.makeBall(65, 65, 25, { isSensor: true, isStatic: true }));
 }
 
 function game() {
