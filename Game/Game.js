@@ -29,6 +29,8 @@ function setup() {
     createCanvas(500, 900);
     matter.init();
 
+    game = new game();
+
     ballOptions = {
         frictionAir: 0.0,
         friction: 0.0,
@@ -38,8 +40,8 @@ function setup() {
 
 	ball = matter.makeBall(490, 300, 20, ballOptions);
 
-    leftFlipper = matter.makeBarrier(465 / 2 - 50, 852, 75, 13, { angle: -0.05 });
-    rightFlipper = matter.makeBarrier(465 / 2 + 50, 852, 75, 13, { angle: 0.05 });
+    leftFlipper = matter.makeBarrier(465 / 2 - 55, 848.3, 80, 13, { angle: -0.05 });
+    rightFlipper = matter.makeBarrier(465 / 2 + 55, 848.3, 80, 13, { angle: 0.05 });
     
     textOptions = {
         isStatic: true,
@@ -156,6 +158,7 @@ function draw() {
     //} else {
     //    levelObjects[0].width = 25;
     //}
+    game.checkInGame();
     makePlungerWall();
     plungerWall.show();
 
@@ -164,11 +167,11 @@ function draw() {
 
 function makePlungerWall() {
     // Are we in a game?
-    if (game.isInGameArea) {
+    if (!game.isInGameArea) {
         // See if it's a small wall
         if (plungerWall.getWidth() < 12.5) {
             matter.forget(plungerWall); // Forget/"break" the object
-            plungerWall = matter.makeBarrier(475, 550, 15, 700); // Make a new one with updated width & x-position
+            plungerWall = matter.makeBarrier(487, 550, 45, 700); // Make a new one with updated width & x-position
             console.log("large plungerWall made!");
         }
     } else {
@@ -177,18 +180,6 @@ function makePlungerWall() {
             plungerWall = matter.makeBarrier(470, 550, 10, 700); // Make a new one with updated width & x-position
             console.log("small plungerWall made!");
         }
-    }
-}
-
-function isInGame() {
-    // If the ball is in the plunger area, we're not ingame
-    if (!(ball.getPositionX() + ball.getWidth() > 475 &&
-        ball.getPositionY() + ball.getHeight() > 200 &&
-        ball.getPositionX() < 475 + 25 &&
-        ball.getPositionY() < 200 + 800)) {
-        return true;
-    } else {
-        return false;
     }
 }
 
@@ -286,12 +277,14 @@ function game() {
 		this.score += value;
 	}
 
-	this.checkInGame(){
-		if (ball.getPositionX() + ball.getWidth() > 475 &&
-			ball.getPositionY() + ball.getHeight() > 200 &&
-			ball.getPositionX() < 475 + 25 &&
-			ball.getPositionY() < 200 + 800) {
-			this.isInGameArea = true;
-		} 
+	this.checkInGame = function () {
+        if (ball.getPositionX() + ball.getWidth() > 475 &&
+            ball.getPositionY() + ball.getHeight() > 200 &&
+            ball.getPositionX() < 475 + 25 &&
+            ball.getPositionY() < 200 + 800) {
+            this.isInGameArea = true;
+        } else {
+            this.isInGameArea = false;
+        }
 	}
 }
