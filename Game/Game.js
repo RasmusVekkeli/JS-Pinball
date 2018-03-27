@@ -1,13 +1,13 @@
 /*
  *  TODO: [X] walls
- *        [ ] make the ball's physics more realistic
- *        [ ] level
+ *        [X] make the ball's physics more realistic
+ *        [/] level
  *		  [X] flippers (player controlled)
- *		  [ ] bumpers (launches the ball when it hits these)
+ *		  [X] bumpers (launches the ball when it hits these)
  *		  [ ] targets (gives points when hit by ball)
  *        [ ] score
- *        [/] plunger
- *        [ ] misc. game logic (game over, lost ball etc...)
+ *        [X] plunger
+ *        [/] misc. game logic (game over, lost ball etc...)
  */
 
 var ball;
@@ -131,9 +131,6 @@ function draw() {
         walls[x].show();
 	}
 
-    for (var i = 0; i < bumperBalls.length; i++) {
-        bumperBalls[i].show();
-    }
     bumpers();
 
     fill(140);
@@ -219,30 +216,30 @@ function initialiseLevel() { //Create and set positions of level objects
     levelObjects.push(matter.makeBarrier(377, 815.5, 185, 51, { angle: -0.55 }));	//Bottom right block
 
 	//Right Choke
-	levelObjects.push(matter.makeBarrier(areaMiddle + 165, 530, 70, 70)); //Choke center
-	levelObjects.push(matter.makeBarrier(areaMiddle + 165.5, 494.5, 49.497, 49.497, { angle: FF })); //Choke top
-	levelObjects.push(matter.makeBarrier(areaMiddle + 130.5, 529.5, 49.497, 49.497, { angle: FF })); //Choke right
-	levelObjects.push(matter.makeBarrier(areaMiddle + 165.5, 565, 49.497, 49.497, { angle: FF })); //Choke bottom
+    levelObjects.push(matter.makeBarrier(areaMiddle + 165 - 7, 530 - 35, 70, 70)); //Choke center
+    levelObjects.push(matter.makeBarrier(areaMiddle + 165.5 - 7, 494.5 - 35, 49.497, 49.497, { angle: FF })); //Choke top
+    levelObjects.push(matter.makeBarrier(areaMiddle + 130.5 - 7, 529.5 - 35, 49.497, 49.497, { angle: FF })); //Choke right
+    levelObjects.push(matter.makeBarrier(areaMiddle + 165.5 - 7, 565 - 35, 49.497, 49.497, { angle: FF })); //Choke bottom
 
 	//Left Choke
-	levelObjects.push(matter.makeBarrier(areaMiddle - 166, 530, 70, 70)); //Choke center
-	levelObjects.push(matter.makeBarrier(areaMiddle - 165.5, 494.5, 49.497, 49.497, { angle: FF })); //Choke top
-	levelObjects.push(matter.makeBarrier(areaMiddle - 130.5, 529.5, 49.497, 49.497, { angle: FF })); //Choke left
-	levelObjects.push(matter.makeBarrier(areaMiddle - 165.5, 565, 49.497, 49.497, { angle: FF })); //Choke bottom
+    levelObjects.push(matter.makeBarrier(areaMiddle - 166 + 7, 530 - 35, 70, 70)); //Choke center
+    levelObjects.push(matter.makeBarrier(areaMiddle - 165.5 + 7, 494.5 - 35, 49.497, 49.497, { angle: FF })); //Choke top
+    levelObjects.push(matter.makeBarrier(areaMiddle - 130.5 + 7, 529.5 - 35, 49.497, 49.497, { angle: FF })); //Choke left
+    levelObjects.push(matter.makeBarrier(areaMiddle - 165.5 + 7, 565 - 35, 49.497, 49.497, { angle: FF })); //Choke bottom
 
     // Left
     levelObjects.push(matter.makeBarrier((areaMiddle / 4) * 2 - 27, 728, 120, 5, { angle: 0.80 }));
     levelObjects.push(matter.makeBall((areaMiddle / 4) * 2 + 22, 757, 37, { isStatic: true }));
     levelObjects.push(matter.makeBall((areaMiddle / 4) - 4, 670, 37, { isStatic: true }));
     levelObjects.push(matter.makeBarrier((areaMiddle / 4) * 2 - 17, 710, 120, 30, { angle: 0.80 })); // Bumper area
-    levelObjects[8].setVelocityY(-10);
+    levelObjects[levelObjects.length - 1].setVelocityY(-10);
 
     // Right
     levelObjects.push(matter.makeBarrier((areaMiddle / 4) * 6 + 27, 728, 120, 5, { angle: -0.80 }));
     levelObjects.push(matter.makeBall((areaMiddle / 4) * 5 + 36, 757, 37, { isStatic: true }));
     levelObjects.push(matter.makeBall((areaMiddle / 4) * 7 + 3, 670, 37, { isStatic: true }));
     levelObjects.push(matter.makeBarrier((areaMiddle / 4) * 6 + 17, 710, 120, 30, { angle: -0.80 })); // Bumper area
-    levelObjects[12].setVelocityY(-10);
+    levelObjects[levelObjects.length - 1].setVelocityY(-10);
     
     /// BUMPER BALLS ///
     bumperBalls.push(matter.makeBall(areaMiddle - 150, 250, 40, { isSensor: true, isStatic: true }));
@@ -250,6 +247,11 @@ function initialiseLevel() { //Create and set positions of level objects
     bumperBalls.push(matter.makeBall(areaMiddle + 150, 250, 40, { isSensor: true, isStatic: true }));
     bumperBalls.push(matter.makeBall(10, 10, 20, { isSensor: true, isStatic: true }));
     bumperBalls.push(matter.makeBall(65, 65, 25, { isSensor: true, isStatic: true }));
+
+    bumperBalls.push(matter.makeBall(areaMiddle - 165.5 + 7 + 35, 494.5 - 35, 30, { isSensor: true, isStatic: true }));
+    bumperBalls.push(matter.makeBall(areaMiddle + 165.5 - 7 - 35, 494.5 - 35, 30, { isSensor: true, isStatic: true }));
+    bumperBalls.push(matter.makeBall(areaMiddle + 165.5 - 7 - 35, 494.5 + 35, 30, { isSensor: true, isStatic: true }));
+    bumperBalls.push(matter.makeBall(areaMiddle - 165.5 + 7 + 35, 494.5 + 35, 30, { isSensor: true, isStatic: true }));
 }
 
 function game() {
