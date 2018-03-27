@@ -89,7 +89,7 @@ function moveFlippers() {
         if (leftFlipper.getAngle() < 0.5) {
             leftFlipper.setAngle(leftFlipper.getAngle() + flipperMovementSpeed);
         }
-        rightFlipper.setVelocityY(0);
+        leftFlipper.setVelocityY(0);
     }
 
     /// RIGHT FLIPPER ///
@@ -171,7 +171,6 @@ function makePlungerWall() {
 			//Changes another wall to fit
 			matter.forget(levelObjects[4]); 
             levelObjects[4] = matter.makeBarrier(407, 797.2, 255, 51, { angle: -0.55 });
-            console.log("large plungerWall made!");
         }
     } else {
         if (plungerWall.getWidth() > 12.5) {
@@ -180,7 +179,6 @@ function makePlungerWall() {
 
             matter.forget(levelObjects[4]);
             levelObjects[4] = matter.makeBarrier(377, 815.5, 185, 51, { angle: -0.55 });
-            console.log("small plungerWall made!");
         }
     }
 }
