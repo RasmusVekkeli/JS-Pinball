@@ -163,18 +163,21 @@ function draw() {
 }
 
 function makePlungerWall() {
-    if (isInGame() /*&& !plungerWall.isActive()*/) {
-        matter.forget(plungerWall);
-        plungerWall = matter.makeBarrier(475, 550, 15, 700);
-        console.log("large plungerWall made!");
-    } else if (!isInGame() /*&& !plungerWall.isActive()*/) {
-        matter.forget(plungerWall);
-        plungerWall = matter.makeBarrier(470, 550, 10, 700);
-        console.log("small plungerWall made!");
+    // Are we in a game?
+    if (game.isInGameArea) {
+        // See if it's a small wall
+        if (plungerWall.getWidth() < 12.5) {
+            matter.forget(plungerWall); // Forget/"break" the object
+            plungerWall = matter.makeBarrier(475, 550, 15, 700); // Make a new one with updated width & x-position
+            console.log("large plungerWall made!");
+        }
+    } else {
+        if (plungerWall.getWidth() > 12.5) {
+            matter.forget(plungerWall); // Forget/"break" the object
+            plungerWall = matter.makeBarrier(470, 550, 10, 700); // Make a new one with updated width & x-position
+            console.log("small plungerWall made!");
+        }
     }
-
-    //matter.forget(plungerWall);
-    //console.log(plungerWall);
 }
 
 function isInGame() {
