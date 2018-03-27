@@ -21,10 +21,7 @@ var levelObjects = [];
 var bumperBalls = [];
 var flipperMovementSpeed = 0.30;
 
-var mouseMoveX;
-var mouseMoveY;
-var prevMouseMoveX;
-var prevMouseMoveY;
+var FF = 0.25 * Math.PI;
 
 // Initialize
 function setup() {
@@ -109,7 +106,7 @@ function moveFlippers() {
 }
 
 function draw() {
-    background(255);
+	background(255);
 
     if (keys && keys[32]) { plunge(); }
 
@@ -127,15 +124,6 @@ function draw() {
     moveFlippers();
     leftFlipper.show();
     rightFlipper.show();
-
-    // Log the mouse coordinates
-    if (prevMouseMoveX != mouseMoveX && prevMouseMoveY != mouseMoveY) {
-        console.log("mouse X = " + mouseMoveX);
-        console.log("mouse Y = " + mouseMoveY);
-        console.log("====================");
-    }
-    prevMouseMoveX = mouseMoveX;
-    prevMouseMoveY = mouseMoveY;
 
     // Draw the walls
     fill(140);
@@ -228,6 +216,17 @@ function initialiseLevel() { //Create and set positions of level objects
 	levelObjects.push(matter.makeBarrier(72, 806, 220, 51, { angle: 0.55 }));	//Bottom left block
 	levelObjects.push(matter.makeBarrier(377, 815.5, 185, 51, { angle: -0.55 }));	//Bottom right block
 
+	//Right Choke
+	levelObjects.push(matter.makeBarrier(areaMiddle + 165, 530, 70, 70)); //Choke center
+	levelObjects.push(matter.makeBarrier(areaMiddle + 165.5, 494.5, 49.497, 49.497, { angle: FF })); //Choke top
+	levelObjects.push(matter.makeBarrier(areaMiddle + 130.5, 529.5, 49.497, 49.497, { angle: FF })); //Choke right
+	levelObjects.push(matter.makeBarrier(areaMiddle + 165.5, 565, 49.497, 49.497, { angle: FF })); //Choke bottom
+
+	//Left Choke
+	levelObjects.push(matter.makeBarrier(areaMiddle - 166, 530, 70, 70)); //Choke center
+	levelObjects.push(matter.makeBarrier(areaMiddle - 165.5, 494.5, 49.497, 49.497, { angle: FF })); //Choke top
+	levelObjects.push(matter.makeBarrier(areaMiddle - 130.5, 529.5, 49.497, 49.497, { angle: FF })); //Choke left
+	levelObjects.push(matter.makeBarrier(areaMiddle - 165.5, 565, 49.497, 49.497, { angle: FF })); //Choke bottom
 
     /// BUMPER BALLS ///
     bumperBalls.push(matter.makeBall(areaMiddle - 150, 250, 40, { isSensor: true, isStatic: true }));
