@@ -104,14 +104,6 @@ function moveFlippers() {
     }
 }
 
-//Resets the ball's position if off canvas
-function checkBall() {
-    if (ball.isOffCanvas()) {
-        ball.setPositionX(random(0, width));
-        ball.setPositionY(300);
-    }
-}
-
 function draw() {
     background(255);
 
@@ -122,7 +114,7 @@ function draw() {
     helloText.show();
 
     // Draw the ball
-    checkBall();
+    //checkBall();
 	fill(70);
     ball.show();
 
@@ -158,7 +150,8 @@ function draw() {
     //} else {
     //    levelObjects[0].width = 25;
     //}
-    game.checkInGame();
+	game.checkInGame();
+	game.checkLost();
     makePlungerWall();
     plungerWall.show();
 
@@ -264,6 +257,8 @@ function game() {
 		else {
 			ball.setPositionX(490);
 			ball.setPositionY(300);
+			ball.setVelocityX(0);
+			ball.setVelocityY(0);
 		}
 
 		this.isInGameArea = false;
@@ -282,9 +277,16 @@ function game() {
             ball.getPositionY() + ball.getHeight() > 200 &&
             ball.getPositionX() < 475 + 25 &&
             ball.getPositionY() < 200 + 800) {
-            this.isInGameArea = true;
-        } else {
             this.isInGameArea = false;
+        } else {
+            this.isInGameArea = true;
         }
+	}
+
+	this.checkLost = function () {
+		if (ball.isOffCanvas()) {
+			console.log("Checked!");
+			this.resetBall(false);
+		}
 	}
 }
