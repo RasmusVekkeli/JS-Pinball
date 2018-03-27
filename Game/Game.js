@@ -166,12 +166,21 @@ function makePlungerWall() {
         // See if it's a small wall
         if (plungerWall.getWidth() < 12.5) {
             matter.forget(plungerWall); // Forget/"break" the object
-            plungerWall = matter.makeBarrier(487, 550, 45, 700); // Make a new one with updated width & x-position
+			plungerWall = matter.makeBarrier(487, 550, 45, 700); // Make a new one with updated width & x-position
+
+			//Changes another wall to fit
+			matter.forget(levelObjects[3]); 
+			levelObjects[3] = matter.makeBarrier(407, 797.2, 255, 51, { angle: -0.55 });
+            console.log("large plungerWall made!");
         }
     } else {
         if (plungerWall.getWidth() > 12.5) {
             matter.forget(plungerWall); // Forget/"break" the object
             plungerWall = matter.makeBarrier(470, 550, 10, 700); // Make a new one with updated width & x-position
+
+			matter.forget(levelObjects[3]);
+			levelObjects[3] = matter.makeBarrier(377, 815.5, 185, 51, { angle: -0.55 });
+            console.log("small plungerWall made!");
         }
     }
 }
@@ -220,8 +229,6 @@ function initialiseLevel() { //Create and set positions of level objects
     levelObjects.push(matter.makeBarrier(47.5, 75, 20, 75));   // Top left block 2
 	levelObjects.push(matter.makeBarrier(72, 806, 220, 51, { angle: 0.55 }));	//Bottom left block
 	levelObjects.push(matter.makeBarrier(377, 815.5, 185, 51, { angle: -0.55 }));	//Bottom right block
-	levelObjects.push(matter.makeBarrier(-5, 700, 20, 100, { angle: -0.30 }));  // left, small
-    levelObjects.push(matter.makeBarrier(455, 710, 10, 100, { angle: 0.30 })); //right, small
 
 
     /// BUMPER BALLS ///
