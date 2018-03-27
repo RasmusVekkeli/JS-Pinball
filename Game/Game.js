@@ -169,8 +169,8 @@ function makePlungerWall() {
 			plungerWall = matter.makeBarrier(487, 550, 45, 700); // Make a new one with updated width & x-position
 
 			//Changes another wall to fit
-			matter.forget(levelObjects[3]); 
-			levelObjects[3] = matter.makeBarrier(407, 797.2, 255, 51, { angle: -0.55 });
+			matter.forget(levelObjects[4]); 
+            levelObjects[4] = matter.makeBarrier(407, 797.2, 255, 51, { angle: -0.55 });
             console.log("large plungerWall made!");
         }
     } else {
@@ -178,8 +178,8 @@ function makePlungerWall() {
             matter.forget(plungerWall); // Forget/"break" the object
             plungerWall = matter.makeBarrier(470, 550, 10, 700); // Make a new one with updated width & x-position
 
-			matter.forget(levelObjects[3]);
-			levelObjects[3] = matter.makeBarrier(377, 815.5, 185, 51, { angle: -0.55 });
+            matter.forget(levelObjects[4]);
+            levelObjects[4] = matter.makeBarrier(377, 815.5, 185, 51, { angle: -0.55 });
             console.log("small plungerWall made!");
         }
     }
