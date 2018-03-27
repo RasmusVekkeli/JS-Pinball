@@ -187,6 +187,8 @@ function plunge() { //Launches the ball if it's in the plungerArea when called
 }
 
 function initialiseLevel() { //Create and set positions of level objects
+
+    /// NORMAL BLOCKS ///
 	levelObjects.push(matter.makeBarrier(470, 550, 10, 700)); // Plunger wall
 	levelObjects.push(matter.makeBarrier(500, 30, 250, 50, { angle: 0.65 }));   // Top right block
 	levelObjects.push(matter.makeBarrier(0, 30, 250, 50, { angle: -0.65 }));   // Top left block
@@ -196,7 +198,7 @@ function initialiseLevel() { //Create and set positions of level objects
 	levelObjects.push(matter.makeBarrier(455, 710, 10, 100, { angle: 0.30 })); //right, small
 
 
-
+    /// BUMPER BALLS ///
     levelObjects.push(matter.makeBall(200, 250, 40, { isSensor: true, isStatic: true }));
     levelObjects.push(matter.makeBall(250, 250, 40, { isSensor: true, isStatic: true }));
     levelObjects.push(matter.makeBall(300, 250, 40, { isSensor: true, isStatic: true }));
