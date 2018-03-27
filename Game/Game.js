@@ -253,7 +253,7 @@ function game() {
 	this.isStarted;
 	this.isInGameArea;
 
-	this.startGame = function () {
+	this.startGame = function () { //Initialises functions and starts the game
 		this.score = 0;
 		this.ballsLeft = 2;
 		this.isStarted = true;
@@ -274,6 +274,8 @@ function game() {
 			ball.setPositionX(490);
 			ball.setPositionY(300);
 		}
+
+		this.isInGameArea = false;
 	}
 
 	this.stopGame = function () {
@@ -282,5 +284,14 @@ function game() {
 
 	this.addScore = function (value) {
 		this.score += value;
+	}
+
+	this.checkInGame(){
+		if (ball.getPositionX() + ball.getWidth() > 475 &&
+			ball.getPositionY() + ball.getHeight() > 200 &&
+			ball.getPositionX() < 475 + 25 &&
+			ball.getPositionY() < 200 + 800) {
+			this.isInGameArea = true;
+		} 
 	}
 }
