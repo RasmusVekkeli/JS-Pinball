@@ -243,3 +243,41 @@ function initialiseLevel() { //Create and set positions of level objects
     levelObjects.push(matter.makeBall(250, 250, 40, { isSensor: true, isStatic: true }));
     levelObjects.push(matter.makeBall(300, 250, 40, { isSensor: true, isStatic: true }));
 }
+
+function game() {
+	this.score;
+	this.ballsLeft;
+	this.isStarted;
+	this.isInGameArea;
+
+	this.startGame = function () {
+		this.score = 0;
+		this.ballsLeft = 2;
+		this.isStarted = true;
+		this.isInGameArea = false;
+
+		this.resetBall(true);
+	}
+
+	this.resetBall = function (free) {
+		if (!free) {
+			this.ballsLeft--;
+		}
+
+		if (this.ballsLeft < 0) {
+			this.stopGame();
+		}
+		else {
+			ball.setPositionX(490);
+			ball.setPositionY(300);
+		}
+	}
+
+	this.stopGame = function () {
+		this.isStarted = false;
+	}
+
+	this.addScore = function (value) {
+		this.score += value;
+	}
+}
