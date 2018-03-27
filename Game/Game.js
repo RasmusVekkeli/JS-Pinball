@@ -38,8 +38,8 @@ function setup() {
 
 	ball = matter.makeBall(490, 300, 20, ballOptions);
 
-    leftFlipper = matter.makeBarrier(465 / 2 - 50, 850, 75, 10, { angle: -0.05 });
-    rightFlipper = matter.makeBarrier(465 / 2 + 50, 850, 75, 10, { angle: 0.05 });
+    leftFlipper = matter.makeBarrier(465 / 2 - 50, 852, 75, 13, { angle: -0.05 });
+    rightFlipper = matter.makeBarrier(465 / 2 + 50, 852, 75, 13, { angle: 0.05 });
     
     textOptions = {
         isStatic: true,
@@ -52,7 +52,9 @@ function setup() {
     walls.push(matter.makeBarrier(483, 924, 35, wallWidth));                                // Bottom wall (plunger)
     walls.push(matter.makeBarrier(0, -(wallWidth / 2), width * 2, wallWidth));              // Top wall
 
-	initialiseLevel();
+    initialiseLevel();
+
+    plungerWall = matter.makeBarrier(470, 550, 10, 700); // Plunger wall
 
     // See if multiple keys are pressed
     window.addEventListener("keydown", function (e) {
@@ -147,7 +149,44 @@ function draw() {
 		levelObjects[i].show();
     }
 
+    // Make the plunger wall bigger if the ball is in the play area
+    //if (isInGame()) {
+    //    matter.makeBarrier(470, 550, 10, 700); // Plunger wall
+    //    plungerWall.show();
+    //} else {
+    //    levelObjects[0].width = 25;
+    //}
+    makePlungerWall();
+    plungerWall.show();
+
     bumpers();
+}
+
+function makePlungerWall() {
+    if (isInGame() /*&& !plungerWall.isActive()*/) {
+        matter.forget(plungerWall);
+        plungerWall = matter.makeBarrier(475, 550, 15, 700);
+        console.log("large plungerWall made!");
+    } else if (!isInGame() /*&& !plungerWall.isActive()*/) {
+        matter.forget(plungerWall);
+        plungerWall = matter.makeBarrier(470, 550, 10, 700);
+        console.log("small plungerWall made!");
+    }
+
+    //matter.forget(plungerWall);
+    //console.log(plungerWall);
+}
+
+function isInGame() {
+    // If the ball is in the plunger area, we're not ingame
+    if (!(ball.getPositionX() + ball.getWidth() > 475 &&
+        ball.getPositionY() + ball.getHeight() > 200 &&
+        ball.getPositionX() < 475 + 25 &&
+        ball.getPositionY() < 200 + 800)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function bumpers() {
@@ -155,10 +194,12 @@ function bumpers() {
         if (ballIsInsideCircle(levelObjects[i])) {
             fill(255, 0, 0);
             levelObjects[i].show();
+            levelObjects[i].radius = 50;
             ball.setVelocityX(ball.getPositionX() - levelObjects[i].getPositionX());
             ball.setVelocityY(ball.getPositionY() - levelObjects[i].getPositionY());
         } else {
             fill(0, 255, 0);
+            levelObjects[i].radius = 40;
             levelObjects[i].show();
         }
     }
@@ -189,7 +230,6 @@ function plunge() { //Launches the ball if it's in the plungerArea when called
 function initialiseLevel() { //Create and set positions of level objects
 
     /// NORMAL BLOCKS ///
-	levelObjects.push(matter.makeBarrier(470, 550, 10, 700)); // Plunger wall
 	levelObjects.push(matter.makeBarrier(500, 30, 250, 50, { angle: 0.65 }));   // Top right block
 	levelObjects.push(matter.makeBarrier(0, 30, 250, 50, { angle: -0.65 }));   // Top left block
 	levelObjects.push(matter.makeBarrier(72, 806, 220, 51, { angle: 0.55 }));	//Bottom left block
