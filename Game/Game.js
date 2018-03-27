@@ -5,7 +5,7 @@
  *		  [X] flippers (player controlled)
  *		  [X] bumpers (launches the ball when it hits these)
  *		  [ ] targets (gives points when hit by ball)
- *        [ ] score
+ *        [/] score
  *        [X] plunger
  *        [/] misc. game logic (game over, lost ball etc...)
  */
@@ -13,7 +13,7 @@
 var ball;
 var ground;
 var keys;
-var helloText;
+var scoreObject;
 var walls = [];
 var wallWidth = 50;
 var areaMiddle = 232.5;
@@ -28,7 +28,7 @@ function setup() {
     createCanvas(500, 900);
     matter.init();
 
-    game = new game();
+    game = new gamez();
 
     ballOptions = {
         frictionAir: 0.0,
@@ -46,7 +46,7 @@ function setup() {
         isStatic: true,
         isSensor: true
     }
-    helloText = matter.makeSign("Hello!", areaMiddle, 150, textOptions);
+    scoreObject = matter.makeSign("Score: " + game.score, areaMiddle, 150, textOptions);
 
     walls.push(matter.makeBarrier(-(wallWidth / 2), 0, wallWidth, height * 2));             // Left wall
     walls.push(matter.makeBarrier(width + wallWidth / 2 - 1, 0, wallWidth, height * 2));    // Right wall
@@ -71,6 +71,8 @@ function setup() {
         mouseMoveX = e.pageX;
         mouseMoveY = e.pageY;
     });
+
+    game.startGame();
 }
 
 function moveFlippers() {
@@ -112,7 +114,9 @@ function draw() {
 
     // Give the text a random color and draw it
     fill(random(0, 255), random(0, 255), random(0, 255));
-    helloText.show();
+    matter.forget(scoreObject);
+    scoreObject = matter.makeSign("Score: " + game.score, areaMiddle, 150, textOptions);
+    scoreObject.show();
 
     // Draw the ball
     //checkBall();
@@ -175,6 +179,7 @@ function bumpers() {
             bumperBalls[i].show();
             ball.setVelocityX(ball.getPositionX() - bumperBalls[i].getPositionX());
             ball.setVelocityY(ball.getPositionY() - bumperBalls[i].getPositionY());
+            game.addScore(50);
         } else {
             fill(0, 255, 0);
             bumperBalls[i].show();
@@ -200,7 +205,7 @@ function plunge() { //Launches the ball if it's in the plungerArea when called
 		ball.getPositionX() < plungerArea.x + plungerArea.w &&
 		ball.getPositionY() < plungerArea.y + plungerArea.h) {
 
-		ball.setVelocityY(-30);
+        ball.setVelocityY(Math.random() * (-20 - -40) + -40);
 	}
 }
 
@@ -254,8 +259,8 @@ function initialiseLevel() { //Create and set positions of level objects
     bumperBalls.push(matter.makeBall(areaMiddle - 165.5 + 7 + 35, 494.5 + 35, 30, { isSensor: true, isStatic: true }));
 }
 
-function game() {
-	this.score;
+function gamez() {
+	this.score = 0;
 	this.ballsLeft;
 	this.isStarted;
 	this.isInGameArea;
@@ -288,7 +293,7 @@ function game() {
 	}
 
 	this.stopGame = function () {
-		this.isStarted = false;
+        this.isStarted = false;
 	}
 
 	this.addScore = function (value) {
