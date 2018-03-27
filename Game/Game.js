@@ -190,9 +190,10 @@ function initialiseLevel() { //Create and set positions of level objects
 	levelObjects.push(matter.makeBarrier(470, 550, 10, 700)); // Plunger wall
 	levelObjects.push(matter.makeBarrier(500, 30, 250, 50, { angle: 0.65 }));   // Top right block
 	levelObjects.push(matter.makeBarrier(0, 30, 250, 50, { angle: -0.65 }));   // Top left block
-	levelObjects.push(matter.makeBarrier(70, 806, 220, 51, { angle: 0.55 }));	//Bottom left block
-	levelObjects.push(matter.makeBarrier(371, 818, 185, 51, { angle: -0.55 }));	//Bottom right block
-    levelObjects.push(matter.makeBarrier(-5, 700, 20, 100, { angle: -0.15 }));  // left, small
+	levelObjects.push(matter.makeBarrier(72, 806, 220, 51, { angle: 0.55 }));	//Bottom left block
+	levelObjects.push(matter.makeBarrier(377, 815.5, 185, 51, { angle: -0.55 }));	//Bottom right block
+	levelObjects.push(matter.makeBarrier(-5, 700, 20, 100, { angle: -0.30 }));  // left, small
+	levelObjects.push(matter.makeBarrier(455, 710, 10, 100, { angle: 0.30 })); //right, small
 
 
 
