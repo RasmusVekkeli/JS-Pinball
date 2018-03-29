@@ -5,3 +5,6 @@
 /.vs/config/applicationhost.config
 /.vs/JS-Pinball/v15/.suo
 /.vs
+/Game/Ball.png
+/Game/PlungerWall.png
+/Game/PlungerWallClosed.png

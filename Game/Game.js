@@ -22,14 +22,26 @@ var areaMiddle = 232.5;
 var levelObjects = [];
 var bumperBalls = [];
 var blackener;
-var flipperMovementSpeed = 0.30;
+var flipperMovementSpeed = 0.50;
 
-var FF = 0.25 * Math.PI;
+var foregroundImage;
+
+var plungerWallImage;
+var plungerWallClosedImage;
+
+var ballImage;
+
+var FF = 0.25 * Math.PI; //Alias for 45 degree angle
 
 // Initialize
 function setup() {
     createCanvas(500, 900);
     matter.init();
+
+	foregroundImage = loadImage("https://i.imgur.com/ilxUfPe.png");
+	plungerWallImage = loadImage("https://i.imgur.com/MvQqzQc.png");
+	plungerWallClosedImage = loadImage("https://i.imgur.com/7DrGOkc.png");
+	ballImage = loadImage("https://i.imgur.com/rgw1Zhi.png");
 
     game = new gamez();
 
@@ -92,7 +104,7 @@ function moveFlippers() {
             leftFlipper.setVelocityY(0);
         }
     } else {
-        if (leftFlipper.getAngle() < 0.5) {
+        if (leftFlipper.getAngle() <= 0.5) {
             leftFlipper.setAngle(leftFlipper.getAngle() + flipperMovementSpeed);
         }
         leftFlipper.setVelocityY(0);
@@ -107,7 +119,7 @@ function moveFlippers() {
             rightFlipper.setVelocityY(0);
         }
     } else {
-        if (rightFlipper.getAngle() > -0.5) {
+        if (rightFlipper.getAngle() >= -0.5) {
             rightFlipper.setAngle(rightFlipper.getAngle() - flipperMovementSpeed);
         }
         rightFlipper.setVelocityY(0);
@@ -137,15 +149,10 @@ function draw() {
 		}
 	}
 	else {
-		background(255);
+		background(0);
 
 		//Check if space bar is pressed
 		if (keys && keys[32]) { plunge(); }
-
-		//Restart the game is the game isn't running and enter is pressed
-		if (keys && keys[13] && !game.isStarted) {
-			game.startGame();
-		}
 
 		// Give the text a random color and draw it
 		fill(random(0, 255), random(0, 255), random(0, 255));
@@ -155,8 +162,9 @@ function draw() {
 
 		// Draw the ball
 		//checkBall();
-		fill(70);
-		ball.show();
+		//fill(70);
+		//ball.show();
+		image(ballImage, ball.getPositionX() - 16, ball.getPositionY() - 16);
 
 		// Draw the flippers
 		fill(255, 0, 255);
@@ -173,14 +181,18 @@ function draw() {
 		bumpers();
 
 		fill(140);
-		for (var i = 0; i < levelObjects.length; i++) {
-			levelObjects[i].show();
-		}
+		//for (var i = 0; i < levelObjects.length; i++) {
+		//	levelObjects[i].show();
+		//}
 
 		game.checkInGame();
 		game.checkLost();
 		makePlungerWall();
-		plungerWall.show();
+		//plungerWall.show();
+
+		drawPlungerWall();
+
+		image(foregroundImage, 0, 0);
 	}
 }
 
@@ -194,7 +206,7 @@ function makePlungerWall() {
 
 			//Changes another wall to fit
 			matter.forget(levelObjects[4]); 
-            levelObjects[4] = matter.makeBarrier(407, 797.2, 255, 51, { angle: -0.55 });
+			levelObjects[4] = matter.makeBarrier(407, 797.2, 255, 51, { angle: -0.55 });
         }
     } else {
         if (plungerWall.getWidth() > 12.5) {
@@ -202,9 +214,17 @@ function makePlungerWall() {
             plungerWall = matter.makeBarrier(470, 550, 10, 700); // Make a new one with updated width & x-position
 
             matter.forget(levelObjects[4]);
-            levelObjects[4] = matter.makeBarrier(377, 815.5, 185, 51, { angle: -0.55 });
+			levelObjects[4] = matter.makeBarrier(377, 815.5, 185, 51, { angle: -0.55 });
         }
     }
+}
+
+function drawPlungerWall() {
+	if (game.isInGameArea) {
+		image(plungerWallClosedImage, 0, 0);
+	} else {
+		image(plungerWallImage, 0, 0);
+	}
 }
 
 function bumpers() {
