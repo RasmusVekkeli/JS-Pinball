@@ -4,7 +4,6 @@
  *        [X] level
  *		  [X] flippers (player controlled)
  *		  [X] bumpers (launches the ball when it hits these)
- *		  [ ] targets (gives points when hit by ball)
  *        [X] score
  *        [X] plunger
  *        [X] misc. game logic (game over, lost ball etc...)
@@ -22,7 +21,7 @@ var areaMiddle = 232.5;
 var levelObjects = [];
 var bumperBalls = [];
 var blackener;
-var flipperMovementSpeed = 0.50;
+var flipperMovementSpeed = 0.625;
 var speedCap = 30;
 
 var foregroundImage;
@@ -49,8 +48,8 @@ function setup() {
     ballOptions = {
         frictionAir: 0.0,
         friction: 0.0,
-		density: 10,
-		restitution: 0.8
+		density: 15,
+        restitution: 0.6
     }
 
 	ball = matter.makeBall(490, 300, 20, ballOptions);
@@ -134,15 +133,15 @@ function draw() {
 
 		fill(random(0, 255), random(0, 255), random(0, 255));
 		matter.forget(scoreObject);
-		scoreObject = matter.makeSign("Score: " + game.score, areaMiddle, 150, textOptions);
+		scoreObject = matter.makeSign("Score: " + game.score, width / 2, 150, textOptions);
 		scoreObject.show();
 
 		matter.forget(gameOverText);
-		gameOverText = matter.makeSign("GAME OVER!!", areaMiddle, 200, { isStatic: true, isSensor: true, width: 200 });
+        gameOverText = matter.makeSign("GAME OVER!!", width / 2, 200, { isStatic: true, isSensor: true, width: 200 });
 		gameOverText.show();
 
 		matter.forget(restartText);
-		restartText = matter.makeSign("Press 'Enter' to restart", areaMiddle, 600, textOptions);
+        restartText = matter.makeSign("Press 'Enter' to restart", width / 2, 600, textOptions);
 		restartText.show();
 
 		if (keys && keys[13]) {
@@ -180,11 +179,6 @@ function draw() {
 		}
 
 		bumpers();
-
-		fill(140);
-		//for (var i = 0; i < levelObjects.length; i++) {
-		//	levelObjects[i].show();
-		//}
 
 		game.checkInGame();
 		game.checkLost();
@@ -254,7 +248,7 @@ function bumpers() {
             ball.setVelocityY(ball.getPositionY() - bumperBalls[i].getPositionY());
             game.addScore(50);
         } else {
-            fill(0, 255, 0);
+            fill(0, 255, 255);
             bumperBalls[i].show();
         }
     }
@@ -389,7 +383,6 @@ function gamez() {
 
 	this.checkLost = function () {
 		if (ball.isOffCanvas()) {
-			console.log("Checked!");
 			this.resetBall(false);
 		}
 	}
