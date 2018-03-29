@@ -1,24 +1,27 @@
 /*
  *  TODO: [X] walls
  *        [X] make the ball's physics more realistic
- *        [/] level
+ *        [X] level
  *		  [X] flippers (player controlled)
  *		  [X] bumpers (launches the ball when it hits these)
  *		  [ ] targets (gives points when hit by ball)
- *        [/] score
+ *        [X] score
  *        [X] plunger
- *        [/] misc. game logic (game over, lost ball etc...)
+ *        [X] misc. game logic (game over, lost ball etc...)
  */
 
 var ball;
 var ground;
 var keys;
 var scoreObject;
+var gameOverText;
+var restartText;
 var walls = [];
 var wallWidth = 50;
 var areaMiddle = 232.5;
 var levelObjects = [];
 var bumperBalls = [];
+var blackener;
 var flipperMovementSpeed = 0.30;
 
 var FF = 0.25 * Math.PI;
@@ -46,14 +49,18 @@ function setup() {
         isStatic: true,
         isSensor: true
     }
-    scoreObject = matter.makeSign("Score: " + game.score, areaMiddle, 150, textOptions);
+	scoreObject = matter.makeSign("Score: " + game.score, areaMiddle, 150, textOptions);
+	gameOverText = matter.makeSign("GAME OVER!!", areaMiddle, 200, textOptions);
+	restartText = matter.makeSign("Press 'Enter' to restart", areaMiddle, 600, textOptions);
 
     walls.push(matter.makeBarrier(-(wallWidth / 2), 0, wallWidth, height * 2));             // Left wall
     walls.push(matter.makeBarrier(width + wallWidth / 2 - 1, 0, wallWidth, height * 2));    // Right wall
     walls.push(matter.makeBarrier(483, 924, 35, wallWidth));                                // Bottom wall (plunger)
     walls.push(matter.makeBarrier(0, -(wallWidth / 2), width * 2, wallWidth));              // Top wall
 
-    initialiseLevel();
+	initialiseLevel();
+
+	blackener = matter.makeBarrier(width / 2, height / 2, width, height, { isStatic: true, isSensor: true });
 
     plungerWall = matter.makeBarrier(470, 550, 10, 700); // Plunger wall
 
@@ -108,45 +115,73 @@ function moveFlippers() {
 }
 
 function draw() {
-	background(255);
+	if (game.gameOver) {
+		fill(0);
+		blackener.show();
 
-    if (keys && keys[32]) { plunge(); }
+		fill(random(0, 255), random(0, 255), random(0, 255));
+		matter.forget(scoreObject);
+		scoreObject = matter.makeSign("Score: " + game.score, areaMiddle, 150, textOptions);
+		scoreObject.show();
 
-    // Give the text a random color and draw it
-    fill(random(0, 255), random(0, 255), random(0, 255));
-    matter.forget(scoreObject);
-    scoreObject = matter.makeSign("Score: " + game.score, areaMiddle, 150, textOptions);
-    scoreObject.show();
+		matter.forget(gameOverText);
+		gameOverText = matter.makeSign("GAME OVER!!", areaMiddle, 200, { isStatic: true, isSensor: true, width: 200 });
+		gameOverText.show();
 
-    // Draw the ball
-    //checkBall();
-	fill(70);
-    ball.show();
+		matter.forget(restartText);
+		restartText = matter.makeSign("Press 'Enter' to restart", areaMiddle, 600, textOptions);
+		restartText.show();
 
-    // Draw the flippers
-    fill(255, 0, 255);
-    moveFlippers();
-    leftFlipper.show();
-    rightFlipper.show();
-
-    // Draw the walls
-    fill(140);
-    for (var x = 0; x < walls.length; x++) {
-        walls[x].show();
+		if (keys && keys[13]) {
+			game.startGame();
+		}
 	}
+	else {
+		background(255);
 
-    bumpers();
+		//Check if space bar is pressed
+		if (keys && keys[32]) { plunge(); }
 
-    fill(140);
-    for (var i = 0; i < levelObjects.length; i++) {
-		levelObjects[i].show();
-    }
+		//Restart the game is the game isn't running and enter is pressed
+		if (keys && keys[13] && !game.isStarted) {
+			game.startGame();
+		}
 
-	game.checkInGame();
-	game.checkLost();
-    makePlungerWall();
-    plungerWall.show();
+		// Give the text a random color and draw it
+		fill(random(0, 255), random(0, 255), random(0, 255));
+		matter.forget(scoreObject);
+		scoreObject = matter.makeSign("Score: " + game.score, areaMiddle, 150, textOptions);
+		scoreObject.show();
 
+		// Draw the ball
+		//checkBall();
+		fill(70);
+		ball.show();
+
+		// Draw the flippers
+		fill(255, 0, 255);
+		moveFlippers();
+		leftFlipper.show();
+		rightFlipper.show();
+
+		// Draw the walls
+		fill(140);
+		for (var x = 0; x < walls.length; x++) {
+			walls[x].show();
+		}
+
+		bumpers();
+
+		fill(140);
+		for (var i = 0; i < levelObjects.length; i++) {
+			levelObjects[i].show();
+		}
+
+		game.checkInGame();
+		game.checkLost();
+		makePlungerWall();
+		plungerWall.show();
+	}
 }
 
 function makePlungerWall() {
@@ -205,7 +240,7 @@ function plunge() { //Launches the ball if it's in the plungerArea when called
 		ball.getPositionX() < plungerArea.x + plungerArea.w &&
 		ball.getPositionY() < plungerArea.y + plungerArea.h) {
 
-        ball.setVelocityY(Math.random() * (-20 - -40) + -40);
+        ball.setVelocityY(Math.random() * (-25 - -40) + -40);
 	}
 }
 
@@ -256,7 +291,7 @@ function initialiseLevel() { //Create and set positions of level objects
     bumperBalls.push(matter.makeBall(areaMiddle - 165.5 + 7 + 35, 494.5 - 35, 30, { isSensor: true, isStatic: true }));
     bumperBalls.push(matter.makeBall(areaMiddle + 165.5 - 7 - 35, 494.5 - 35, 30, { isSensor: true, isStatic: true }));
     bumperBalls.push(matter.makeBall(areaMiddle + 165.5 - 7 - 35, 494.5 + 35, 30, { isSensor: true, isStatic: true }));
-    bumperBalls.push(matter.makeBall(areaMiddle - 165.5 + 7 + 35, 494.5 + 35, 30, { isSensor: true, isStatic: true }));
+	bumperBalls.push(matter.makeBall(areaMiddle - 165.5 + 7 + 35, 494.5 + 35, 30, { isSensor: true, isStatic: true }));
 }
 
 function gamez() {
@@ -264,12 +299,14 @@ function gamez() {
 	this.ballsLeft;
 	this.isStarted;
 	this.isInGameArea;
+	this.gameOver;
 
 	this.startGame = function () { //Initialises functions and starts the game
 		this.score = 0;
 		this.ballsLeft = 2;
 		this.isStarted = true;
 		this.isInGameArea = false;
+		this.gameOver = false;
 
 		this.resetBall(true);
 	}
@@ -293,7 +330,8 @@ function gamez() {
 	}
 
 	this.stopGame = function () {
-        this.isStarted = false;
+		this.isStarted = false;
+		this.gameOver = true;
 	}
 
 	this.addScore = function (value) {
