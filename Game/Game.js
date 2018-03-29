@@ -23,6 +23,7 @@ var levelObjects = [];
 var bumperBalls = [];
 var blackener;
 var flipperMovementSpeed = 0.50;
+var speedCap = 30;
 
 var foregroundImage;
 
@@ -193,6 +194,23 @@ function draw() {
 		drawPlungerWall();
 
 		image(foregroundImage, 0, 0);
+
+		if (ball.getVelocityX() > speedCap || ball.getVelocityX() < -speedCap) {
+			if (ball.getVelocityX() > 0) {
+				ball.setVelocityX(30);
+			}
+			else {
+				ball.setVelocityX(-30);
+			}
+		}
+
+		if (ball.getVelocityY() > speedCap || ball.getVelocityY() < -speedCap) {
+			if (ball.getVelocityY() > 0) {
+				ball.setVelocityY(30);
+			} else {
+				ball.setVelocityY(-30);
+			}
+		}
 	}
 }
 
