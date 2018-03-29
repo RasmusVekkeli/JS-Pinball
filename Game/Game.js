@@ -21,7 +21,7 @@ var areaMiddle = 232.5;
 var levelObjects = [];
 var bumperBalls = [];
 var blackener;
-var flipperMovementSpeed = 0.625;
+var flipperMovementSpeed = 0.3;
 var speedCap = 30;
 
 var foregroundImage;
